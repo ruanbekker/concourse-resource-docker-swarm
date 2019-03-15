@@ -7,7 +7,9 @@ exec 1>&2 # redirect all output to stderr for logging
 payload=$(cat)
 
 # extract variables from json
+dockerswarm_user=$(echo $payload | jq -r '.source.DOCKERSWARM_USER')
 dockerswarm_hostname=$(echo $payload | jq -r '.source.DOCKERSWARM_HOSTNAME')
+
 dockerhub_user=$(echo $payload | jq -r '.source.DOCKERHUB_USER')
 dockerhub_password=$(echo $payload | jq -r '.source.DOCKERHUB_PASSWORD')
 stack_name=$(echo $payload | jq -r '.source.STACK_NAME')
@@ -28,17 +30,18 @@ fi
 
 #set -v
 
+# docker-tunnel needs key at /tmp/key
 echo ${dockerswarm_key} | sed -e 's/\(KEY-----\)\s/\1\n/g; s/\s\(-----END\)/\n\1/g' | sed -e '2s/\s\+/\n/g' > /tmp/key.pem
-chmod 0600 /tmp/key.pem
+chmod 0600 /tmp/key
 
 echo "establishing ssh tunbel"
-screen -S sshtunnel -m -d sh -c \
-  "ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /tmp/key.pem -NL localhost:2376:/var/run/docker.sock root@${dockerswarm_hostname}"
-
-sleep 3
+# https://hub.docker.com/r/ruanbekker/docker-remote-tunnel
+docker-tunnel --connect ${dockerswarm_user}@{dockerswarm_hostname}
+# export docker_host
+source /root/.docker-tunnel.sh
+sleep 2
 
 echo "Deploying ${stack_name}"
-export DOCKER_HOST="localhost:2376"
 docker login -u ${dockerhub_user} -p ${dockerhub_password}
 ls -lah
 find .
