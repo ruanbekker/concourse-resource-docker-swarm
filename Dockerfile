@@ -1,8 +1,10 @@
 FROM alpine
 
 COPY assets/* /opt/resource/
+COPY docker-tunnel /usr/bin/docker-tunnel
 
 RUN apk add --no-cache \
+    bash \
     ca-certificates \
     curl \
     docker \
@@ -11,5 +13,5 @@ RUN apk add --no-cache \
     openssl \
     screen \
  && update-ca-certificates
-RUN apk --no-cache add bash
-RUN chmod +x /opt/resource/*
+
+RUN chmod +x /usr/bin/docker-tunnel && chmod +x /opt/resource/*
