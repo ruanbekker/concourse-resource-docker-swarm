@@ -1,1 +1,44 @@
+resources:
+- name: main-repo
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/lekker-soos-n-cracker.git
+    
+resource_types:
+  - name: docker-swarm-deploy
+    type: docker-image
+    source:
+      repository: rbekker87/concourse-docker-swarm-deploy
 
+jobs:
+- name: build
+  plan:
+  - get: code
+    trigger: true
+  - task: build
+    file: main-repo/path/build.yml
+  - task: create-context
+    file: main-repo/path/create-context.yml
+  - put: image
+    params:
+      build: context
+  - put: swarm
+  # requires context ?
+
+- name: image
+  type: docker-image
+  source:
+    username: ((dockerhub_user))
+    password: ((dockerhub-password))
+    repository: ((dockerhub-repo))
+
+- name: swarm
+  type: docker-swarm-deploy
+  source:
+    DOCKERSWARM_USER: ((dockerswarm_user))
+    DOCKERSWARM_HOSTNAME: ((dockerswarm_hostname))
+    DOCKERSWARM_KEY: ((dockerswarm_key))
+    DOCKERHUB_USER: ((dockerhub_user))
+    DOCKERHUB_PASSWORD: ((dockerhub_password))
+    STACK_NAME: ((dockerswarm_stackname))
+    ENVIRONMENT: production
