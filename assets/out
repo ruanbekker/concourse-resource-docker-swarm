@@ -54,6 +54,7 @@ find .
 find /tmp
 cat ./main-repo/ci/docker-compose.production.yml
 docker stack deploy --prune -c ./main-repo/ci/docker-compose.${environment}.yml ${stack_name} --with-registry-auth
+cat /tmp/build/put/main-repo/ci/docker-compose.production.yml
 
 echo "terminating sshtunnel"
 screen -S sshtunnel -X quit
