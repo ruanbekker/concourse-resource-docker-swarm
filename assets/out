@@ -31,7 +31,7 @@ fi
 #set -v
 
 # docker-tunnel needs key at /tmp/key
-echo ${dockerswarm_key} | sed -e 's/\(KEY-----\)\s/\1\n/g; s/\s\(-----END\)/\n\1/g' | sed -e '2s/\s\+/\n/g' > /tmp/key.pem
+echo ${dockerswarm_key} | sed -e 's/\(KEY-----\)\s/\1\n/g; s/\s\(-----END\)/\n\1/g' | sed -e '2s/\s\+/\n/g' > /tmp/key
 chmod 0600 /tmp/key
 
 echo "establishing ssh tunbel"
@@ -45,6 +45,7 @@ echo "Deploying ${stack_name}"
 docker login -u ${dockerhub_user} -p ${dockerhub_password}
 ls -lah
 find .
+cat ./main-repo/ci/docker-compose.production.yml
 docker stack deploy --prune -c ./main-repo/ci/docker-compose.${environment}.yml ${stack_name} --with-registry-auth
 
 echo "terminating sshtunnel"
