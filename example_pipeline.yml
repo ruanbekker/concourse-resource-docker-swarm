@@ -31,7 +31,7 @@ resource_types:
 jobs:
 - name: build
   plan:
-  - get: code
+  - get: main-repo
     trigger: true
   - task: build
     file: main-repo/path/build.yml
@@ -41,6 +41,5 @@ jobs:
     params:
       build: context
   - put: swarm
-  # requires context ?
 
 
