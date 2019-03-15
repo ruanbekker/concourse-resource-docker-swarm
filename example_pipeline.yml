@@ -3,6 +3,24 @@ resources:
   type: git
   source:
     uri: https://github.com/ruanbekker/lekker-soos-n-cracker.git
+
+- name: image
+  type: docker-image
+  source:
+    username: ((dockerhub_user))
+    password: ((dockerhub-password))
+    repository: ((dockerhub-repo))
+
+- name: swarm
+  type: docker-swarm-deploy
+  source:
+    DOCKERSWARM_USER: ((dockerswarm_user))
+    DOCKERSWARM_HOSTNAME: ((dockerswarm_hostname))
+    DOCKERSWARM_KEY: ((dockerswarm_key))
+    DOCKERHUB_USER: ((dockerhub_user))
+    DOCKERHUB_PASSWORD: ((dockerhub_password))
+    STACK_NAME: ((dockerswarm_stackname))
+    ENVIRONMENT: production
     
 resource_types:
   - name: docker-swarm-deploy
@@ -25,20 +43,4 @@ jobs:
   - put: swarm
   # requires context ?
 
-- name: image
-  type: docker-image
-  source:
-    username: ((dockerhub_user))
-    password: ((dockerhub-password))
-    repository: ((dockerhub-repo))
 
-- name: swarm
-  type: docker-swarm-deploy
-  source:
-    DOCKERSWARM_USER: ((dockerswarm_user))
-    DOCKERSWARM_HOSTNAME: ((dockerswarm_hostname))
-    DOCKERSWARM_KEY: ((dockerswarm_key))
-    DOCKERHUB_USER: ((dockerhub_user))
-    DOCKERHUB_PASSWORD: ((dockerhub_password))
-    STACK_NAME: ((dockerswarm_stackname))
-    ENVIRONMENT: production
