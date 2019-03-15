@@ -1,9 +1,6 @@
 FROM alpine
 MAINTAINER Ruan Bekker <ruan@ruanbekker.com>
 
-COPY assets/* /opt/resource/
-COPY wrapper/docker-tunnel /usr/bin/docker-tunnel
-
 RUN apk add --no-cache \
     bash \
     ca-certificates \
@@ -14,5 +11,8 @@ RUN apk add --no-cache \
     openssl \
     screen \
  && update-ca-certificates
+
+COPY assets/* /opt/resource/
+COPY wrapper/docker-tunnel /usr/bin/docker-tunnel
 
 RUN chmod +x /usr/bin/docker-tunnel && chmod +x /opt/resource/*

@@ -1,6 +1,6 @@
 #!/bin/bash
 #!/bin/sh -u
-
+set -ex
 exec 3>&1 # make stdout available as fd 3 for the result
 exec 1>&2 # redirect all output to stderr for logging
 
@@ -15,7 +15,8 @@ dockerhub_password=$(echo $payload | jq -r '.source.DOCKERHUB_PASSWORD')
 stack_name=$(echo $payload | jq -r '.source.STACK_NAME')
 environment=$(echo $payload | jq -r '.source.ENVIRONMENT')
 dockerswarm_key=$(echo $payload | jq -r '.source.DOCKERSWARM_KEY')
-
+echo "1"
+find /tmp/
 echo --- SERVICE INFO ---
 echo swarm hostname: ${dockerswarm_hostname}
 echo swarm stack name: ${stack_name}
@@ -29,11 +30,14 @@ if [ ${environment} == "null" ] && [ "${stack_name}" == "null" ] && [ "${dockers
 fi
 
 #set -v
-
+echo "2"
+find /tmp/
 # docker-tunnel needs key at /tmp/key
 echo ${dockerswarm_key} | sed -e 's/\(KEY-----\)\s/\1\n/g; s/\s\(-----END\)/\n\1/g' | sed -e '2s/\s\+/\n/g' > /tmp/key
 chmod 0600 /tmp/key
 
+echo "3"
+find /tmp
 echo "establishing ssh tunbel"
 # https://hub.docker.com/r/ruanbekker/docker-remote-tunnel
 docker-tunnel --connect ${dockerswarm_user}@{dockerswarm_hostname}
@@ -41,10 +45,13 @@ docker-tunnel --connect ${dockerswarm_user}@{dockerswarm_hostname}
 source /root/.docker-tunnel.sh
 sleep 2
 
+echo "4"
+find /tmp/
 echo "Deploying ${stack_name}"
 docker login -u ${dockerhub_user} -p ${dockerhub_password}
 ls -lah
 find .
+find /tmp
 cat ./main-repo/ci/docker-compose.production.yml
 docker stack deploy --prune -c ./main-repo/ci/docker-compose.${environment}.yml ${stack_name} --with-registry-auth
 
