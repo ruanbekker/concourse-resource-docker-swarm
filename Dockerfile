@@ -1,7 +1,8 @@
 FROM alpine
+MAINTAINER Ruan Bekker <ruan@ruanbekker.com>
 
 COPY assets/* /opt/resource/
-COPY docker-tunnel /usr/bin/docker-tunnel
+COPY wrapper/docker-tunnel /usr/bin/docker-tunnel
 
 RUN apk add --no-cache \
     bash \
