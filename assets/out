@@ -51,7 +51,7 @@ source /root/.docker-tunnel.sh
 sleep 2
 echo "Deploying ${stack_name}"
 docker login -u ${dockerhub_user} -p ${dockerhub_password}
-$cat /tmp/build/put/main-repo/ci/docker-compose.production.yml
+#$ cat /tmp/build/put/main-repo/ci/docker-compose.production.yml
 echo "path to data: /tmp/${BUILD_JOB_NAME}/put/main-repo"
 # ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /tmp/key -NL localhost:2376:/var/run/docker.sock
 docker stack deploy --prune -c /tmp/build/put/main-repo/ci/docker-compose.${environment}.yml ${stack_name} --with-registry-auth
