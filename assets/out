@@ -62,3 +62,4 @@ echo "cleaning up"
 rm -rf /tmp/key
 
 echo '{ "version": { "ref": "'$BUILD_ID'" } }' >&3
+sleep 20

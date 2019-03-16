@@ -3,7 +3,5 @@ set -ex
 echo "in script"
 export
 export > /tmp/in.log
-echo "build-id: $BUILD_ID"
-echo "ref: $ref"
 echo '{ "version": { "ref": "'$BUILD_ID'" } }'
 exit 0
