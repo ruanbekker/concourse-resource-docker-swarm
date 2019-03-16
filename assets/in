@@ -1,4 +1,9 @@
 #!/bin/sh
+set -ex
+echo "in script"
+export
 export > /tmp/in.log
+echo "build-id: $BUILD_ID"
+echo "ref: $ref"
 echo '{ "version": { "ref": "none" } }'
 exit 0
