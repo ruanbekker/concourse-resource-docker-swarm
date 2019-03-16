@@ -2,8 +2,10 @@
 #!/bin/sh -u
 exec 3>&1 
 exec 1>&2 
-
+set -ex
 payload=$(cat)
+source=$1
+echo $source
 
 # extract variables from json
 dockerswarm_user=$(echo $payload | jq -r '.source.DOCKERSWARM_USER')
