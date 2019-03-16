@@ -5,5 +5,5 @@ export
 export > /tmp/in.log
 echo "build-id: $BUILD_ID"
 echo "ref: $ref"
-echo '{ "version": { "ref": "none" } }'
+echo '{ "version": { "ref": "'$BUILD_ID'" } }'
 exit 0
